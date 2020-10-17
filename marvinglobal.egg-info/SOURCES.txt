@@ -1,0 +1,8 @@
+README.md
+setup.py
+marvinglobal/__init__.py
+marvinglobal/marvinglobal.py
+marvinglobal.egg-info/PKG-INFO
+marvinglobal.egg-info/SOURCES.txt
+marvinglobal.egg-info/dependency_links.txt
+marvinglobal.egg-info/top_level.txt

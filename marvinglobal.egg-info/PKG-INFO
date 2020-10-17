@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: marvinglobal
+Version: 0.0.1
+Summary: shared data structures in marvin control
+Home-page: UNKNOWN
+Author: jm
+Author-email: author@example.com
+License: UNKNOWN
+Description: Classes to be used to share data between marvin processes
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
