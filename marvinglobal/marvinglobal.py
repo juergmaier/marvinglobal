@@ -9,7 +9,7 @@ from enum import Enum
 
 import marvinglobal.usedSharedRessources as usr
 
-SHARED_DATA_PORT = 50001
+SHARED_DATA_PORT = 50000
 
 SERVO_STATIC_DEFINITIONS_FILE = 'd:/projekte/inmoov/marvinData/servoStaticDefinitions.json'
 SERVO_TYPE_DEFINITIONS_FILE = 'd:/projekte/inmoov/marvinData/servoTypeDefinitions.json'
@@ -70,7 +70,7 @@ class MoveDirection(Enum):
     ROTATE_RIGHT = 10
 
 
-CartStatus = Enum('CartStatus', 'UNKNOWN CONNECTING READY')
+CartStatus = Enum('CartStatus', 'UNKNOWN DOWN CONNECTING READY')
 
 CartGuiUpdateRequest = Enum('CartGuiUpdateRequest', 'SENSOR_TEST_DATA FLOOR_OFFSET')
 

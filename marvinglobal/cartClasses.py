@@ -37,10 +37,18 @@ class Location:
 # use SetModifiedFlagOnChange as base class
 @dataclass
 class Movement:
+    # can not use subclasses as they get not transferred through queue
+    #start = Location()
+    #target = Location()
+    startX = 0
+    startY = 0
+    startYaw = 0
+    targetX = 0
+    targetY = 0
+    targetYaw = 0
 
-    start = Location()
-    target = Location()
     moveDirection = None    # this is the enum moveDirection value, not an angle
+    moveAngle = 0               # this is the angle the cart is moving
 
     distanceRequested = 0
     distanceMoved = 0
@@ -53,16 +61,16 @@ class Movement:
     moveStartTime = None
     maxDuration: float = None
 
-    obstacleFromUltrasonicDistanceSensor = "-"
-    obstacleFromInfraredDistanceSensor = "-"
+    obstacleFromUltrasonicDistanceSensor = 0
+    obstacleFromInfraredDistanceSensor = 0
     sensorIdObstacle = None
-    abyssFromInfraredSensor = "-"
+    abyssFromInfraredDistanceSensor = 0
     sensorIdAbyss = None
 
     blocked:bool = False
     blockedStartTime:float = None
 
-    currentCommand:str = "STOP"
+    #currentCommand:str = "STOP"    use state for currentCommand
     reasonStopped:str = ""
 
     def evalMoveAngle(self, moveDirection):
@@ -78,11 +86,11 @@ class Movement:
             mg.MoveDirection.BACK_DIAG_LEFT: 135,
             mg.MoveDirection.BACK_DIAG_RIGHT: -135}[moveDirection]
 
-        return (self.start.yaw + directionAngle) % 360  # make 0 degrees pointing to the right
+        move360 = (self.startYaw + directionAngle) % 360
+        if move360 > 180:
+            move360 -= 360
+        return move360
 
-
-    def updateCartRotation(self):
-        self.rotated = (self.current.yaw - self.start.yaw) % 360
 
 @dataclass
 class SensorTestData:
@@ -99,7 +107,8 @@ class IrSensorReferenceDistance:
 
 @dataclass
 class FloorOffset:
-    offset:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
+    obstacleHeight:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
+    abyssDepth:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
     lastUpdate:float = 1.0      # causes sensor to be drawn on init
 
 

@@ -11,7 +11,7 @@ class CartCommandMethods:        # use config.cc to access these methods
         requestQueue.put({'cmd': mg.CartCommand.TEST_IR_SENSOR, 'sensorId': sensorId})
 
     @staticmethod
-    def move(requestQueue, direction:int, speed, distance, protected:bool = True):
+    def move(requestQueue, direction:mg.MoveDirection, speed, distance, protected:bool = True):
         requestQueue.put({'cmd': mg.CartCommand.MOVE, 'direction': direction, 'speed': speed, 'distance': distance, 'protected': protected})
 
     @staticmethod

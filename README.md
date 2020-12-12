@@ -1,5 +1,6 @@
 Global Constances and Classes used throughout InMoov processes to be used to share data between marvin processes
-use 
+use
+
 pip install -e d:\projekte\inmoov\marvinglobal
 to make it importable
 
