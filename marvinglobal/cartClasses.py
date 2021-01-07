@@ -100,16 +100,18 @@ class SensorTestData:
     sumMeasures:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
 
 
-@dataclass
+#@dataclass do not use dataclass as it has side effects when setting values
 class IrSensorReferenceDistance:
-    distances:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
+    def __init__(self):
+        self.distances:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
 
 
-@dataclass
+#@dataclass do not use dataclass as it has side effects when setting values
 class FloorOffset:
-    obstacleHeight:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
-    abyssDepth:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
-    lastUpdate:float = 1.0      # causes sensor to be drawn on init
+    def __init__(self):
+        self.obstacleHeight:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
+        self.abyssDepth:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
+        self.lastUpdate:float = 1.0      # causes sensor to be drawn on init
 
 
 @dataclass

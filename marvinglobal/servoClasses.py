@@ -7,7 +7,7 @@ import time
 class ServoStatic:
     def __init__(self, servoDefinition):
         #self.__dict__ = servoDefinition
-        self.arduino = servoDefinition['arduino']
+        self.arduinoIndex = servoDefinition['arduinoIndex']
         self.pin = servoDefinition['pin']
         self.powerPin = servoDefinition['powerPin']
         self.minComment = servoDefinition['minComment']
@@ -45,7 +45,7 @@ class ServoDerived:
 
     def __init__(self, servoStatic, servoType):
 
-        self.servoUniqueId = (servoStatic.arduino * 100) + servoStatic.pin
+        self.servoUniqueId = (servoStatic.arduinoIndex * 100) + servoStatic.pin
         self.degRange = servoStatic.maxDeg - servoStatic.minDeg
         self.posRange = servoStatic.maxPos - servoStatic.minPos
 
@@ -64,10 +64,10 @@ class ServoDerived:
             self.msPerPos = servoType.typeSpeed * 1000 / 60
 
 
+# part of dict with key servoName
 class ServoCurrent:
 
-    def __init__(self, servoName):
-        self.servoName = servoName
+    def __init__(self):
         self.assigned = False
         self.moving = False
         self.attached = False
