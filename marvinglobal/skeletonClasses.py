@@ -6,7 +6,6 @@ import time
 ###########################################
 class ServoStatic:
     def __init__(self, servoDefinition):
-        #self.__dict__ = servoDefinition
         self.arduinoIndex = servoDefinition['arduinoIndex']
         self.pin = servoDefinition['pin']
         self.powerPin = servoDefinition['powerPin']
@@ -57,7 +56,7 @@ class ServoDerived:
         # msPerPos uses the move speed if it is slower than the servo speed
         # robotControl checks requested move durations against the max speed possible and
         # increases move duration if necessary
-        # ATTENTION: servoTypeSpeed is s/60 deg, moveSpeed is ms/60 deg!!
+        # ATTENTION: servoStatic.moveSpeed is ms/60 deg, servoTypeSpeed is s/60 deg,
         if (servoStatic.moveSpeed / 1000) > servoType.typeSpeed:
             self.msPerPos = servoStatic.moveSpeed / 60
         else:
@@ -68,25 +67,26 @@ class ServoDerived:
 class ServoCurrent:
 
     def __init__(self):
-        self.assigned = False
-        self.moving = False
-        self.attached = False
-        self.autoDetach = 1.0
-        self.verbose = False
-        self.position = 0
-        self.degrees = 0
-        self.swiping = False
-        self.timeOfLastMoveRequest = time.time()
+        self.assigned:bool = False
+        self.moving:bool = False
+        self.attached:bool = False
+        self.autoDetach:int = 0
+        self.verbose:bool = False
+        self.position:int = 0
+        self.degrees:int = 0
+        self.swiping:bool = False
+        self.inRequestList:bool = False
+        self.timeOfLastMoveRequest = 0
 
-    def updateData(self, newDegrees, newPosition, newAssigned, newMoving, newAttached, newAutoDetach,
-                   newVerbose, newSwiping, newTimeOfLastMoveRequest):
-        self.degrees = newDegrees
-        self.position = newPosition
-        self.assigned = newAssigned
-        self.moving = newMoving
-        self.attached = newAttached
-        self.autoDetach = newAutoDetach
-        self.verbose = newVerbose
-        self.swiping = newSwiping
-        self.timeOfLastMoveRequest = newTimeOfLastMoveRequest
+    def updateData(self, newValues):
+        self.degrees = newValues['degrees']
+        self.position = newValues['position']
+        self.assigned = newValues['assigned']
+        self.moving = newValues['moving']
+        self.attached = newValues['attached']
+        self.autoDetach = newValues['autoDetach']
+        self.verbose = newValues['verbose']
+        self.swiping = newValues['swiping']
+        self.inRequestList = newValues['inRequestList']
+        self.timeOfLastMoveRequest = newValues['timeOfLastMoveRequest']
 
