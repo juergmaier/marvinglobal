@@ -1,6 +1,7 @@
 
+import time
 import numpy as np
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import marvinglobal.marvinglobal as mg
 
@@ -35,29 +36,17 @@ class ImuData:
     yawCorrection:float = 0
     updateTime:float = 0
 
-# use SetModifiedFlagOnChange as base class
-@dataclass
-class Location:
-    x:float = 0
-    y:float = 0
-    yaw:float = 999     # trigger initial location message
-    lastLocationSaveTime:float = 0
 
-
-# use SetModifiedFlagOnChange as base class
 @dataclass
 class Movement:
-    # can not use subclasses as they get not transferred through queue
-    #start = Location()
-    #target = Location()
-    startX = 0
+    startX = 0      # can not use subclasse Location() as they get not transferred through queue?
     startY = 0
     startYaw = 0
     targetX = 0
     targetY = 0
     targetYaw = 0
 
-    moveDirection = None    # this is the enum moveDirection value, not an angle
+    moveDirectionEnum = None    # this is the enum moveDirection value, not an angle
     moveAngle = 0               # this is the angle the cart is moving
 
     distanceRequested = 0

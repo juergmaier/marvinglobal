@@ -9,17 +9,19 @@ usedSharedRessources = {
         'ServoDerivedDict',
         'ServoCurrentDict',
         'CartDict',
+        'EnvironmentDict',
 
         'SharedDataUpdateQueue',
         'SkeletonGuiUpdateQueue',
         'CartGuiUpdateQueue',
+        'MapGuiUpdateQueue',
         'MainGuiUpdateQueue',
         'IkUpdateQueue',
         'SkeletonRequestQueue',
         'CartRequestQueue',
         'SpeakRequestQueue',
         'PlayGestureQueue',
-        'NavManagerRequestQueue',
+        'navManagerRequestQueue',
         'ImageProcessingQueue',
     ],
 
@@ -98,6 +100,7 @@ usedSharedRessources = {
         # 'CartRequestQueue',
         'SpeakRequestQueue',
         'PlayGestureQueue',
+        # 'navManagerRequestQueue',
         # 'ImageProcessingQueue'
     ],
     'speechControl': [
@@ -117,6 +120,7 @@ usedSharedRessources = {
         # 'CartRequestQueue',
         'SpeakRequestQueue',
         'PlayGestureQueue',
+        # 'navManagerRequestQueue',
         # 'ImageProcessingQueue'
     ],
     'imageProcessing': [
@@ -146,6 +150,7 @@ usedSharedRessources = {
         # 'ServoDerivedDict',
         'ServoCurrentDict',
         'CartDict',
+        'EnvironmentDict',
 
         'SharedDataUpdateQueue',
         # 'SkeletonGuiUpdateQueue',
@@ -155,7 +160,27 @@ usedSharedRessources = {
         'CartRequestQueue',
         # 'SpeakRequestQueue',
         # 'SpeakRespondQueue',
-        'NavManagerRequestQueue',
+        'navManagerRequestQueue',
         'ImageProcessingQueue'
+    ],
+    'stickFigure': [
+        'ProcessDict',
+        # 'ArduinoDict',
+        # 'ServoTypeDict',
+        # 'ServoStaticDict',
+        # 'ServoDerivedDict',
+        'ServoCurrentDict',
+        # 'CartDict',
+
+        #'SharedDataUpdateQueue',
+        # 'SkeletonGuiUpdateQueue',
+        # 'CartGuiUpdateQueue',
+        'IkUpdateQueue',
+        #'SkeletonRequestQueue',
+        # 'CartRequestQueue',
+        #'SpeakRequestQueue',
+        #'PlayGestureQueue',
+        #'navManagerRequestQueue',
+        # 'ImageProcessingQueue'
     ],
 }

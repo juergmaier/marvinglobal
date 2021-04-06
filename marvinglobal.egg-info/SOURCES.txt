@@ -3,10 +3,11 @@ setup.py
 marvinglobal/__init__.py
 marvinglobal/cartClasses.py
 marvinglobal/cartCommandMethods.py
+marvinglobal/environmentClasses.py
 marvinglobal/marvinShares.py
 marvinglobal/marvinglobal.py
-marvinglobal/servoClasses.py
-marvinglobal/servoCommandMethods.py
+marvinglobal/skeletonClasses.py
+marvinglobal/skeletonCommandMethods.py
 marvinglobal/usedSharedRessources.py
 marvinglobal.egg-info/PKG-INFO
 marvinglobal.egg-info/SOURCES.txt

@@ -25,19 +25,20 @@ class MarvinShares:
         ShareManager.register('getServoDerivedDict')
         ShareManager.register('getServoCurrentDict')
         ShareManager.register('getCartDict')
+        ShareManager.register('getEnvironmentDict')
 
         ShareManager.register('getSharedDataUpdateQueue')
         ShareManager.register('getSkeletonGuiUpdateQueue')
         ShareManager.register('getCartGuiUpdateQueue')
+        ShareManager.register('getMapGuiUpdateQueue')
         ShareManager.register('getMainGuiUpdateQueue')
         ShareManager.register('getIkUpdateQueue')
         ShareManager.register('getSkeletonRequestQueue')
         ShareManager.register('getCartRequestQueue')
         ShareManager.register('getSpeakRequestQueue')
-        #ShareManager.register('getSpeakResponseQueue')
-        ShareManager.register('getNavManagerRequestQueue')
         ShareManager.register('getImageProcessingQueue')
         ShareManager.register('getPlayGestureQueue')
+        ShareManager.register('getNavManagerRequestQueue')
 
         # connect with marviData process
         self.m = ShareManager(address=('127.0.0.1', mg.SHARED_DATA_PORT), authkey=b'marvin')
@@ -120,6 +121,15 @@ class MarvinShares:
                 mg.log(f"could not get access to cartDict, {e}")
                 return False
 
+        if 'EnvironmentDict' in ressourceList:
+            if verbose: mg.log(f"try to connect with EnvironemntDict")
+            try:
+                self.environmentDict = self.m.getEnvironmentDict()
+                mg.log(f"environmentDict available")
+            except Exception as e:
+                mg.log(f"could not get access to environmentDict, {e}")
+                return False
+
         # Queues
         if 'SharedDataUpdateQueue' in ressourceList:
             if verbose: mg.log(f"try to connect with sharedDataUpdateQueue")
@@ -147,6 +157,16 @@ class MarvinShares:
             except Exception as e:
                 mg.log(f"could not get access to cartGuiUpdateQueue, {e}")
                 return False
+
+        if 'MapGuiUpdateQueue' in ressourceList:
+            if verbose: mg.log(f"try to connect with mapGuiUpdateQueue")
+            try:
+                self.mapGuiUpdateQueue = self.m.getMapGuiUpdateQueue()
+                mg.log(f"mapGuiUpdateQueue available")
+            except Exception as e:
+                mg.log(f"could not get access to mapGuiUpdateQueue, {e}")
+                return False
+
 
         if 'MainGuiUpdateQueue' in ressourceList:
             if verbose: mg.log(f"try to connect with mainGuiUpdateQueue")
@@ -193,7 +213,7 @@ class MarvinShares:
                 mg.log(f"could not get access to speakRequestQueue, {e}")
                 return False
 
-        if 'NavManagerRequestQueue' in ressourceList:
+        if 'navManagerRequestQueue' in ressourceList:
             if verbose: mg.log(f"try to connect with navManagerRequestQueue")
             try:
                 self.navManagerRequestQueue = self.m.getNavManagerRequestQueue()
@@ -217,7 +237,16 @@ class MarvinShares:
                 self.playGestureQueue = self.m.getPlayGestureQueue()
                 mg.log(f"playGestureQueue available")
             except Exception as e:
-                mg.log(f"could not get access to playGestureQueue, {e}")
+                mg.log(f"could not get access to PlayGestureQueue, {e}")
+                return False
+
+        if 'navManagerRequestQueue' in ressourceList:
+            if verbose: mg.log(f"try to connect with NavManagerRequestQueue")
+            try:
+                self.navManagerRequestQueue = self.m.getNavManagerRequestQueue()
+                mg.log(f"NavManagerRequestQueue available")
+            except Exception as e:
+                mg.log(f"could not get access to NavManagerRequestQueue, {e}")
                 return False
 
         return True
@@ -230,7 +259,7 @@ class MarvinShares:
     def updateSharedData(self, msg):
         try:
             # process list gets updated regularly to work as life signal, do not log it
-            #if cmd[0] != mg.SharedDataItem.PROCESS:
+            #if cmd[0] != mg.SharedDataItems.PROCESS:
             if msg['cmd'] in mg.logDataUpdates:
                 mg.log(f'sharedDataUpdate {msg}')
             self.sharedDataUpdateQueue.put(msg)
@@ -241,19 +270,19 @@ class MarvinShares:
 
 
     def startProcess(self, processName):
-        subprocess.Popen([sys.executable, f"d:/projekte/InMoov/{processName}/{processName}.py"])
+        subprocess.Popen([sys.executable, f"{mg.INMOOV_BASE_FOLDER}/{processName}/{processName}.py"])
 
 
     def updateProcessDict(self, processName):
-        #cmd = (mg.SharedDataItem.PROCESS, processName, {'lastUpdate': time.time()})
-        msg = {'cmd': mg.SharedDataItem.PROCESS, 'sender': processName,
+        #cmd = (mg.SharedDataItems.PROCESS, processName, {'lastUpdate': time.time()})
+        msg = {'cmd': mg.SharedDataItems.PROCESS, 'sender': processName,
                'info': {'processName': processName, 'running': True, 'lastUpdate': time.time()}}
         return self.updateSharedData(msg)
 
 
     def removeProcess(self, processName):
-        #cmd = (mg.SharedDataItem.PROCESS, processName, {'remove': True})
-        msg = {'cmd': mg.SharedDataItem.PROCESS, 'sender': processName,
+        #cmd = (mg.SharedDataItems.PROCESS, processName, {'remove': True})
+        msg = {'cmd': mg.SharedDataItems.PROCESS, 'sender': processName,
                'info': {'processName': processName, 'remove': True}}
         return self.updateSharedData(msg)
 
