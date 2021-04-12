@@ -23,7 +23,7 @@ class SkeletonCommandMethods:        # use config.sc to access these methods
     @staticmethod
     #def setVerbose(requestQueue, sender, servoName, verbose):
     def setVerbose(requestQueue, sender, servoName, verboseOn):
-        requestQueue.put({'sender': sender, 'cmd': 'setVerbose', 'servoName': servoName, 'verboseOn': verboseOn})
+        requestQueue.put({'sender': sender, 'cmd': 'setVerboseRequest', 'servoName': servoName, 'verboseOn': verboseOn})
 
     @staticmethod
     def allServoStop(requestQueue, sender):

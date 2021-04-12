@@ -36,7 +36,7 @@ class MarvinShares:
         ShareManager.register('getSkeletonRequestQueue')
         ShareManager.register('getCartRequestQueue')
         ShareManager.register('getSpeakRequestQueue')
-        ShareManager.register('getImageProcessingQueue')
+        ShareManager.register('getImageProcessingRequestQueue')
         ShareManager.register('getPlayGestureQueue')
         ShareManager.register('getNavManagerRequestQueue')
 
@@ -57,7 +57,7 @@ class MarvinShares:
 
         mg.log(f"{process}, {ressourceList}")
 
-        if 'ProcessDict' in ressourceList:
+        if 'processDict' in ressourceList:
             if verbose: mg.log(f"try to connect with processDict")
             try:
                 self.processDict = self.m.getProcessDict()
@@ -66,7 +66,7 @@ class MarvinShares:
                 mg.log(f"could not get access to processDict, {e}")
                 return False
 
-        if 'ArduinoDict' in ressourceList:
+        if 'arduinoDict' in ressourceList:
             if verbose: mg.log(f"try to connect with arduinoDict")
             try:
                 self.arduinoDict = self.m.getArduinoDict()
@@ -75,7 +75,7 @@ class MarvinShares:
                 mg.log(f"could not get access to arduinoDict, {e}")
                 return False
 
-        if 'ServoTypeDict' in ressourceList:
+        if 'servoTypeDict' in ressourceList:
             if verbose: mg.log(f"try to connect with servoTypeDict")
             try:
                 self.servoTypeDict = self.m.getServoTypeDict()
@@ -85,7 +85,7 @@ class MarvinShares:
                 mg.log(f"could not get access to servoTypeDict, {e}")
                 return False
 
-        if 'ServoStaticDict' in ressourceList:
+        if 'servoStaticDict' in ressourceList:
             if verbose: mg.log(f"try to connect with servoStaticDict")
             try:
                 self.servoStaticDict = self.m.getServoStaticDict()
@@ -94,7 +94,7 @@ class MarvinShares:
                 mg.log(f"could not get access to servoStaticDict, {e}")
                 return False
 
-        if 'ServoDerivedDict' in ressourceList:
+        if 'servoDerivedDict' in ressourceList:
             if verbose: mg.log(f"try to connect with servoDerivedDict")
             try:
                 self.servoDerivedDict = self.m.getServoDerivedDict()
@@ -103,7 +103,7 @@ class MarvinShares:
                 mg.log(f"could not get access to servoDerivedDict, {e}")
                 return False
 
-        if 'ServoCurrentDict' in ressourceList:
+        if 'servoCurrentDict' in ressourceList:
             if verbose: mg.log(f"try to connect with servoCurrentDict")
             try:
                 self.servoCurrentDict = self.m.getServoCurrentDict()
@@ -112,7 +112,7 @@ class MarvinShares:
                 mg.log(f"could not get access to servoCurrentDict, {e}")
                 return False
 
-        if 'CartDict' in ressourceList:
+        if 'cartDict' in ressourceList:
             if verbose: mg.log(f"try to connect with cartDict")
             try:
                 self.cartDict = self.m.getCartDict()
@@ -121,7 +121,7 @@ class MarvinShares:
                 mg.log(f"could not get access to cartDict, {e}")
                 return False
 
-        if 'EnvironmentDict' in ressourceList:
+        if 'environmentDict' in ressourceList:
             if verbose: mg.log(f"try to connect with EnvironemntDict")
             try:
                 self.environmentDict = self.m.getEnvironmentDict()
@@ -131,7 +131,7 @@ class MarvinShares:
                 return False
 
         # Queues
-        if 'SharedDataUpdateQueue' in ressourceList:
+        if 'sharedDataUpdateQueue' in ressourceList:
             if verbose: mg.log(f"try to connect with sharedDataUpdateQueue")
             try:
                 self.sharedDataUpdateQueue = self.m.getSharedDataUpdateQueue()
@@ -140,7 +140,7 @@ class MarvinShares:
                 mg.log(f"could not get access to sharedDataUpdateQueue, {e}")
                 return False
 
-        if 'SkeletonGuiUpdateQueue' in ressourceList:
+        if 'skeletonGuiUpdateQueue' in ressourceList:
             if verbose: mg.log(f"try to connect with skeletonGuiUpdateQueue")
             try:
                 self.skeletonGuiUpdateQueue = self.m.getSkeletonGuiUpdateQueue()
@@ -149,7 +149,7 @@ class MarvinShares:
                 mg.log(f"could not get access to skeletonGuiUpdateQueue, {e}")
                 return False
 
-        if 'CartGuiUpdateQueue' in ressourceList:
+        if 'cartGuiUpdateQueue' in ressourceList:
             if verbose: mg.log(f"try to connect with cartGuiUpdateQueue")
             try:
                 self.cartGuiUpdateQueue = self.m.getCartGuiUpdateQueue()
@@ -158,7 +158,7 @@ class MarvinShares:
                 mg.log(f"could not get access to cartGuiUpdateQueue, {e}")
                 return False
 
-        if 'MapGuiUpdateQueue' in ressourceList:
+        if 'mapGuiUpdateQueue' in ressourceList:
             if verbose: mg.log(f"try to connect with mapGuiUpdateQueue")
             try:
                 self.mapGuiUpdateQueue = self.m.getMapGuiUpdateQueue()
@@ -168,7 +168,7 @@ class MarvinShares:
                 return False
 
 
-        if 'MainGuiUpdateQueue' in ressourceList:
+        if 'mainGuiUpdateQueue' in ressourceList:
             if verbose: mg.log(f"try to connect with mainGuiUpdateQueue")
             try:
                 self.mainGuiUpdateQueue = self.m.getMainGuiUpdateQueue()
@@ -177,7 +177,7 @@ class MarvinShares:
                 mg.log(f"could not get access to mainGuiUpdateQueue, {e}")
                 return False
 
-        if 'IkUpdateQueue' in ressourceList:
+        if 'ikUpdateQueue' in ressourceList:
             if verbose: mg.log(f"try to connect with ikUpdateQueue")
             try:
                 self.ikUpdateQueue = self.m.getIkUpdateQueue()
@@ -186,7 +186,7 @@ class MarvinShares:
                 mg.log(f"could not get access to ikUpdateQueue, {e}")
                 return False
 
-        if 'SkeletonRequestQueue' in ressourceList:
+        if 'skeletonRequestQueue' in ressourceList:
             if verbose: mg.log(f"try to connect with SkeletonRequestQueue")
             try:
                 self.skeletonRequestQueue = self.m.getSkeletonRequestQueue()
@@ -195,7 +195,7 @@ class MarvinShares:
                 mg.log(f"could not get access to SkeletonRequestQueue, {e}")
                 return False
 
-        if 'CartRequestQueue' in ressourceList:
+        if 'cartRequestQueue' in ressourceList:
             if verbose: mg.log(f"try to connect with CartRequestQueue")
             try:
                 self.cartRequestQueue = self.m.getCartRequestQueue()
@@ -204,7 +204,7 @@ class MarvinShares:
                 mg.log(f"could not get access to CartRequestQueue, {e}")
                 return False
 
-        if 'SpeakRequestQueue' in ressourceList:
+        if 'speakRequestQueue' in ressourceList:
             if verbose: mg.log(f"try to connect with speakRequestQueue")
             try:
                 self.speakRequestQueue = self.m.getSpeakRequestQueue()
@@ -222,16 +222,16 @@ class MarvinShares:
                 mg.log(f"could not get access to navManagerRequestQueue, {e}")
                 return False
 
-        if 'ImageProcessingQueue' in ressourceList:
-            if verbose: mg.log(f"try to connect with imageProcessingQueue")
+        if 'imageProcessingRequestQueue' in ressourceList:
+            if verbose: mg.log(f"try to connect with imageProcessingRequestQueue")
             try:
-                self.imageProcessingQueue = self.m.getImageProcessingQueue()
-                mg.log(f"imageProcessingQueue available")
+                self.imageProcessingRequestQueue = self.m.getImageProcessingRequestQueue()
+                mg.log(f"imageProcessingRequestQueue available")
             except Exception as e:
-                mg.log(f"could not get access to imageProcessingQueue, {e}")
+                mg.log(f"could not get access to imageProcessingRequestQueue, {e}")
                 return False
 
-        if 'PlayGestureQueue' in ressourceList:
+        if 'playGestureQueue' in ressourceList:
             if verbose: mg.log(f"try to connect with playGestureQueue")
             try:
                 self.playGestureQueue = self.m.getPlayGestureQueue()
@@ -270,7 +270,9 @@ class MarvinShares:
 
 
     def startProcess(self, processName):
-        subprocess.Popen([sys.executable, f"{mg.INMOOV_BASE_FOLDER}/{processName}/{processName}.py"])
+        executable = f"{mg.INMOOV_BASE_FOLDER}/{processName}/{processName}.py"
+        print(f"starting process {executable}")
+        subprocess.Popen([sys.executable, executable])
 
 
     def updateProcessDict(self, processName):

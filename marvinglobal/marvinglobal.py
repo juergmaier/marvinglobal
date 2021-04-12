@@ -7,6 +7,7 @@ import subprocess
 from enum import Enum, auto
 from dataclasses import dataclass, field
 
+#from marvinglobal import environmentClasses
 
 import marvinglobal.usedSharedRessources as usr
 
@@ -40,6 +41,8 @@ class SharedDataItems(Enum):
     PLATFORM_IMU = 60
     HEAD_IMU = 61
     ENVIRONMENT_ROOM = 70
+    ENVIRONMENT_SCAN_LOCATION_LIST = 71
+    ENVIRONMENT_MARKER_LIST = 72
 
 
 logDataUpdates = [SharedDataItems.ARDUINO]

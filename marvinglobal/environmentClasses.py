@@ -18,6 +18,37 @@ class RoomData:
     fullScanDone:bool = False
 
 
+@dataclass
+class ScanLocation:
+    scanLocation:mg.Location
+
+class ScanLocationList:
+    def __init__(self):
+        self.scanLocationList:list[ScanLocation] = []
+        self.fileName = None
+
+    def reset(self):
+        self.scanLocationList = []
+        self.saveScanLocationList()
+
+
+    def addScanLocation(self, scanLocation:ScanLocation):
+        self.scanLocationList.append(scanLocation)
+        self.saveScanLocationList()
+
+
+    def loadScanLocationList(self, fileName):
+        if os.path.exists(self.filename):
+            with open(self.filename, "r") as read_file:
+                config.scanLocationListLocal = json.load(read_file)
+            self.fileName = fileName
+
+    def saveScanLocationList(self):
+        if self.fileName is not None:
+            with open(self.filename, "w") as write_file:
+                json.dump(self.scanLocationList, write_file, indent=2)
+
+
 
 
 @dataclass
@@ -34,32 +65,30 @@ class Marker:
 
 class MarkerList:
 
-    def __init__(self, fileName):
+    def __init__(self):
         self.markerList:list[Marker] = []
-        self.fileName = fileName
-
+        self.fileName = None
 
     def reset(self):
         self.markerList = []
         self.saveMarkerList()
 
-
     def addMarker(self, marker:Marker):
         self.markerList.append(marker)
         self.saveMarkerList()
 
-
-    def loadMarkerList(self):
-
-        if os.path.exists(self.filename):
-            with open(self.filename, "r") as read_file:
+    def loadMarkerList(self, filenName):
+        self.fileName = fileName
+        if os.path.exists(self.fileName):
+            with open(self.fileName, "r") as read_file:
                 markerList = json.load(read_file)
 
 
     def saveMarkerList(self):
 
-        with open(self.filename, "w") as write_file:
-            json.dump(self.markerList, write_file, indent=2)
+        if self.fileName is not None:
+            with open(self.fileName, "w") as write_file:
+                json.dump(self.markerList, write_file, indent=2)
 
 
     def updateMarkerFoundResult(resultList, camType:mg.CamTypes, cartLocation:mg.Location, camYaw:int):
