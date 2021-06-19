@@ -53,24 +53,39 @@ class Movement:
     distanceMoved = 0
     protected = False
 
-    rotationRequested = 0
-    rotationDirection  = mg.MoveDirection.ROTATE_LEFT
-    rotated = 0
+    relAngleRequested = 0
+    relAngleRotated = 0
 
     moveStartTime = None
     maxDuration: float = None
 
-    obstacleFromUltrasonicDistanceSensor = 0
-    obstacleFromInfraredDistanceSensor = 0
-    sensorIdObstacle = None
-    abyssFromInfraredDistanceSensor = 0
+    obstacleDistanceHeadcam = None
+    obstacleHeightHeadcam = None
+    obstacleDistanceUsSensor = None
+    obstacleHeightIrSensor = None
+    irSensorIdObstacle = None
+
+    abyssDistanceHeadcam = None
+    abyssDepthHeadcam = None
+    abyssDistanceIrSensor = None
+    abyssDepthIrSensor = None
     sensorIdAbyss = None
 
     blocked:bool = False
     blockedStartTime:float = None
+    blockEvent = mg.CartMoveBlockEvents.FREE_PATH
 
-    #currentCommand:str = "STOP"    use state for currentCommand
     reasonStopped:str = ""
+
+    def clearBlocking(self):
+        self.blocked = False
+        self.blockEvent = mg.CartMoveBlockEvents.FREE_PATH
+        self.obstacleHeightIrSensor = None
+        self.irSensorIdObstacle =  None
+        self.usSensorIdObstacle = None
+        self.abyssDepthIrSensor = None
+        self.irSensorIdAbyss = None
+        self.blockedStartTime = None
 
     def evalMoveAngle(self, moveDirection):
         # returns the angle of the move based on current yaw and move direction
@@ -95,7 +110,7 @@ class Movement:
 class SensorTestData:
     sensorId:int = 0
     distance:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
-    numMeasures:int = 0
+    numMeasures:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int8)
     sumMeasures:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
 
 
@@ -104,6 +119,9 @@ class IrSensorReferenceDistance:
     def __init__(self):
         self.distances:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
 
+class UsSensorDistance:
+    def __init__(self):
+        self.distance:np.ndarray = np.zeros((mg.NUM_US_DISTANCE_SENSORS), dtype=np.int16)
 
 #@dataclass do not use dataclass as it has side effects when setting values
 class FloorOffset:
@@ -111,12 +129,6 @@ class FloorOffset:
         self.obstacleHeight:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
         self.abyssDepth:np.ndarray = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
         self.lastUpdate:float = 1.0      # causes sensor to be drawn on init
-
-
-@dataclass
-class ObstacleDistance:
-    distance = np.zeros((mg.NUM_US_DISTANCE_SENSORS), dtype=np.int16)
-    timeStamp = np.zeros((mg.NUM_IR_DISTANCE_SENSORS), dtype=np.float)
 
 
 class Battery:

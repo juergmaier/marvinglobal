@@ -1,11 +1,24 @@
 
 import time
+from dataclasses import dataclass, field
 
 ###########################################
 # servo data classes
 ###########################################
+@dataclass
+class ServoType:
+
+    def updateValues(self, servoTypeDefinition):
+        self.typeMinPos = servoTypeDefinition['typeMinPos']
+        self.typeMaxPos = servoTypeDefinition['typeMaxPos']
+        self.typeInverted = servoTypeDefinition['typeInverted']
+        self.typeSpeed = servoTypeDefinition['typeSpeed']
+        self.typeTorque = servoTypeDefinition['typeTorque']
+
+
+@dataclass
 class ServoStatic:
-    def __init__(self, servoDefinition):
+    def updateValues(self, servoDefinition):
         self.arduinoIndex = servoDefinition['arduinoIndex']
         self.pin = servoDefinition['pin']
         self.powerPin = servoDefinition['powerPin']
@@ -26,24 +39,54 @@ class ServoStatic:
         self.wireColorArduinoTerminal = servoDefinition['wireColorArduinoTerminal']
         self.wireColorTerminalServo = servoDefinition['wireColorTerminalServo']
 
+    def degFromPos(self, inPos: int):
+        # inPos has to be in the 0..180 range (servo.write() limits this)
+        # minPos has to be smaller than maxPos. Inversion is handled in the arduino
+        # minDegrees always has to be smaller than maxDegrees
+        degPerPos = abs(self.maxDeg-self.minDeg) / abs(self.maxPos-self.minPos)
+        deltaPos = inPos - self.zeroDegPos
 
-class ServoType:
-    def __init__(self, servoTypeDefinition):
-        #self.__dict__ = servoTypeDefinition
-        self.typeMinPos = servoTypeDefinition['typeMinPos']
-        self.typeMaxPos = servoTypeDefinition['typeMaxPos']
-        self.typeInverted = servoTypeDefinition['typeInverted']
-        self.typeSpeed = servoTypeDefinition['typeSpeed']
-        self.typeTorque = servoTypeDefinition['typeTorque']
+        degrees = deltaPos * degPerPos
+        # print(f"degrees: {degrees}")
+        return round(degrees)
 
 
+@dataclass
+class ServoFeedback:
+    i2cMultiplexerAddress = 0
+    i2cMultiplexerChannel = 0
+    speedACalcType = 0
+    speedAFactor = 0.0
+    speedAOffset = 0.0
+    speedBCalcType = 0
+    speedBFactor = 0.0
+    speedBOffset = 0.0
+    degreesFactor = 1.0
+    servoSpeedRange = 90
+
+    def updateValues(self, servoFeedbackDefinition):
+        self.i2cMultiplexerAddress = servoFeedbackDefinition['i2cMultiplexerAddress']
+        self.i2cMultiplexerChannel = servoFeedbackDefinition['i2cMultiplexerChannel']
+        self.speedACalcType = servoFeedbackDefinition['speedACalcType']
+        self.speedAFactor = servoFeedbackDefinition['speedAFactor']
+        self.speedAOffset = servoFeedbackDefinition['speedAOffset']
+        self.speedBCalcType = servoFeedbackDefinition['speedBCalcType']
+        self.speedBFactor = servoFeedbackDefinition['speedBFactor']
+        self.speedBOffset = servoFeedbackDefinition['speedBOffset']
+        self.degPerPos = servoFeedbackDefinition['degPerPos']
+        self.servoSpeedRange = servoFeedbackDefinition['servoSpeedRange']
+
+@dataclass
 class ServoDerived:
     """
     Useful preevaluated values with servo
     """
+    servoUniqueId = 0
+    degRange = 1
+    posRange = 1
+    msPerPos = 1
 
-    def __init__(self, servoStatic, servoType):
-
+    def updateValues(self, servoStatic, servoType):
         self.servoUniqueId = (servoStatic.arduinoIndex * 100) + servoStatic.pin
         self.degRange = servoStatic.maxDeg - servoStatic.minDeg
         self.posRange = servoStatic.maxPos - servoStatic.minPos
@@ -51,7 +94,7 @@ class ServoDerived:
         # a servo has normally a shaft rotation speed for a 60° swipe defined
         # this is the maximum speed possible by the servo
         # the inmoov robot has in many cases not a direct shaft connection for a movement
-        # but a mechnical gear mechanism
+        # but a mechnical gear mechanism in between
         # for these servos we can define a max move speed of the controlled part
         # msPerPos uses the move speed if it is slower than the servo speed
         # robotControl checks requested move durations against the max speed possible and
@@ -64,23 +107,24 @@ class ServoDerived:
 
 
 # part of dict with key servoName
+@dataclass
 class ServoCurrent:
+    #degrees:int = 0
+    requestedPosition:int = 0
+    currentPosition:int = 0
+    assigned:bool = False
+    moving:bool = False
+    attached:bool = False
+    autoDetach:int = 0
+    verbose:bool = False
+    swiping:bool = False
+    inRequestList:bool = False
+    timeOfLastMoveRequest:float = 0.0
 
-    def __init__(self):
-        self.assigned:bool = False
-        self.moving:bool = False
-        self.attached:bool = False
-        self.autoDetach:int = 0
-        self.verbose:bool = False
-        self.position:int = 0
-        self.degrees:int = 0
-        self.swiping:bool = False
-        self.inRequestList:bool = False
-        self.timeOfLastMoveRequest = 0
-
-    def updateData(self, newValues):
-        self.degrees = newValues['degrees']
-        self.position = newValues['position']
+    def updateValues(self, newValues):
+        #self.degrees = newValues['degrees']
+        self.requestedPosition = newValues['requestedPosition']
+        self.currentPosition = newValues['currentPosition']
         self.assigned = newValues['assigned']
         self.moving = newValues['moving']
         self.attached = newValues['attached']
@@ -90,3 +134,5 @@ class ServoCurrent:
         self.inRequestList = newValues['inRequestList']
         self.timeOfLastMoveRequest = newValues['timeOfLastMoveRequest']
 
+    def updatePositionOnly(self, position):
+        self.position = newValues['position']

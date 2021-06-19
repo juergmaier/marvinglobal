@@ -20,10 +20,7 @@ class MarvinShares:
         mg.log(f"try to connect with marvinData")
         ShareManager.register('getProcessDict')
         ShareManager.register('getArduinoDict')
-        ShareManager.register('getServoTypeDict')
-        ShareManager.register('getServoStaticDict')
-        ShareManager.register('getServoDerivedDict')
-        ShareManager.register('getServoCurrentDict')
+        ShareManager.register('getServoDict')
         ShareManager.register('getCartDict')
         ShareManager.register('getEnvironmentDict')
 
@@ -46,7 +43,6 @@ class MarvinShares:
 
     @retry(wait=wait_fixed(2), stop=stop_after_delay(10))
     def sharedDataConnect(self, process):
-
 
         try:
             self.m.connect()
@@ -75,41 +71,14 @@ class MarvinShares:
                 mg.log(f"could not get access to arduinoDict, {e}")
                 return False
 
-        if 'servoTypeDict' in ressourceList:
-            if verbose: mg.log(f"try to connect with servoTypeDict")
+        if 'servoDict' in ressourceList:
+            if verbose: mg.log(f"try to connect with servoDict")
             try:
-                self.servoTypeDict = self.m.getServoTypeDict()
-                mg.log(f"servoTypeDict available")
+                self.servoDict = self.m.getServoDict()
+                mg.log(f"servoDict available")
                 #mg.log(self.servoTypeDict.get('MG996R').typeMaxPos)
             except Exception as e:
-                mg.log(f"could not get access to servoTypeDict, {e}")
-                return False
-
-        if 'servoStaticDict' in ressourceList:
-            if verbose: mg.log(f"try to connect with servoStaticDict")
-            try:
-                self.servoStaticDict = self.m.getServoStaticDict()
-                mg.log(f"servoStaticDict available")
-            except Exception as e:
-                mg.log(f"could not get access to servoStaticDict, {e}")
-                return False
-
-        if 'servoDerivedDict' in ressourceList:
-            if verbose: mg.log(f"try to connect with servoDerivedDict")
-            try:
-                self.servoDerivedDict = self.m.getServoDerivedDict()
-                mg.log(f"servoDerivedDict available")
-            except Exception as e:
-                mg.log(f"could not get access to servoDerivedDict, {e}")
-                return False
-
-        if 'servoCurrentDict' in ressourceList:
-            if verbose: mg.log(f"try to connect with servoCurrentDict")
-            try:
-                self.servoCurrentDict = self.m.getServoCurrentDict()
-                mg.log(f"servoCurrentDict available")
-            except Exception as e:
-                mg.log(f"could not get access to servoCurrentDict, {e}")
+                mg.log(f"could not get access to servoDict, {e}")
                 return False
 
         if 'cartDict' in ressourceList:
@@ -260,7 +229,7 @@ class MarvinShares:
         try:
             # process list gets updated regularly to work as life signal, do not log it
             #if cmd[0] != mg.SharedDataItems.PROCESS:
-            if msg['cmd'] in mg.logDataUpdates:
+            if msg['msgType'] in mg.logDataUpdates:
                 mg.log(f'sharedDataUpdate {msg}')
             self.sharedDataUpdateQueue.put(msg)
             return True
@@ -270,21 +239,37 @@ class MarvinShares:
 
 
     def startProcess(self, processName):
-        executable = f"{mg.INMOOV_BASE_FOLDER}/{processName}/{processName}.py"
-        print(f"starting process {executable}")
-        subprocess.Popen([sys.executable, executable])
+        pyVersion = "py39"
+        pyExec = "python3.9"
+        if processName == "imageProcessing":
+            pyVersion = "py37"
+            pyExec = "python3.7"
+        #executable = f"{mg.INMOOV_BASE_FOLDER}/batchStarter/{processName}.sh"
+        pythonPath = f"/home/marvin/miniconda3/envs/{pyVersion}/bin/{pyExec}"
+        processPath = f"/home/marvin/InMoov/{processName}/{processName}.py"
+        print(f"starting process {pythonPath}, {processPath}")
+        executable = f"{pythonPath} {processPath}"
+        try:
+            subprocess.Popen([sys.executable, processPath], shell=True)
+        except Exception as e:
+            print(f"could not start process: {processPath}, {e}")
+
+    def startAllProcesses(self):
+        processList =  ['marvinGui'] #, 'skeletonControl', 'cartControl', 'speechControl', 'imageProcessing']
+        for processName in processList:
+            self.startProcess(processName)
 
 
     def updateProcessDict(self, processName):
         #cmd = (mg.SharedDataItems.PROCESS, processName, {'lastUpdate': time.time()})
-        msg = {'cmd': mg.SharedDataItems.PROCESS, 'sender': processName,
+        msg = {'msgType': mg.SharedDataItems.PROCESS, 'sender': processName,
                'info': {'processName': processName, 'running': True, 'lastUpdate': time.time()}}
         return self.updateSharedData(msg)
 
 
     def removeProcess(self, processName):
         #cmd = (mg.SharedDataItems.PROCESS, processName, {'remove': True})
-        msg = {'cmd': mg.SharedDataItems.PROCESS, 'sender': processName,
+        msg = {'msgType': mg.SharedDataItems.PROCESS, 'sender': processName,
                'info': {'processName': processName, 'remove': True}}
         return self.updateSharedData(msg)
 

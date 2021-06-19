@@ -4,10 +4,7 @@ usedSharedRessources = {
     'marvinGui': [
         'processDict',
         'arduinoDict',
-        'servoTypeDict',
-        'servoStaticDict',
-        'servoDerivedDict',
-        'servoCurrentDict',
+        'servoDict',
         'cartDict',
         'environmentDict',
 
@@ -28,10 +25,7 @@ usedSharedRessources = {
     'skeletonControl': [
         'processDict',
         #'arduinoDict',
-        'servoTypeDict',
-        'servoStaticDict',
-        'servoDerivedDict',
-        'servoCurrentDict',
+        'servoDict',
         #'cartDict'
         'sharedDataUpdateQueue',
         'skeletonGuiUpdateQueue',
@@ -47,10 +41,7 @@ usedSharedRessources = {
     'cartControl': [
         'processDict',
         #'arduinoDict',
-        #'servoTypeDict',
-        #'servoStaticDict',
-        #'servoDerivedDict',
-        'servoCurrentDict',
+        'servoDict',
         #'cartDict'
         'sharedDataUpdateQueue',
         #'skeletonGuiUpdateQueue',
@@ -66,10 +57,7 @@ usedSharedRessources = {
     'randomMoves': [
         'processDict',
         # 'arduinoDict',
-        # 'servoTypeDict',
-        'servoStaticDict',
-        # 'servoDerivedDict',
-        'servoCurrentDict',
+        'servoDict',
         # 'cartDict',
 
         'sharedDataUpdateQueue',
@@ -86,18 +74,15 @@ usedSharedRessources = {
     'playGesture': [
         'processDict',
         # 'arduinoDict',
-        # 'servoTypeDict',
-        # 'servoStaticDict',
-        # 'servoDerivedDict',
-        'servoCurrentDict',
-        # 'cartDict',
+        'servoDict',
+        'cartDict',
 
         'sharedDataUpdateQueue',
         # 'skeletonGuiUpdateQueue',
         # 'cartGuiUpdateQueue',
         # 'ikUpdateQueue',
         'skeletonRequestQueue',
-        # 'cartRequestQueue',
+        'cartRequestQueue',
         'speakRequestQueue',
         'playGestureQueue',
         # 'navManagerRequestQueue',
@@ -106,10 +91,7 @@ usedSharedRessources = {
     'speechControl': [
         'processDict',
         # 'arduinoDict',
-        # 'servoTypeDict',
-        'servoStaticDict',
-        # 'servoDerivedDict',
-        #'servoCurrentDict',
+        'servoDict',
         # 'cartDict',
 
         'sharedDataUpdateQueue',
@@ -126,10 +108,7 @@ usedSharedRessources = {
     'imageProcessing': [
         'processDict',
         # 'arduinoDict',
-        # 'servoTypeDict',
-        # 'servoStaticDict',
-        # 'servoDerivedDict',
-        # 'servoCurrentDict',
+        # 'servoDict',
         'cartDict',
         'environmentDict',
 
@@ -146,10 +125,7 @@ usedSharedRessources = {
     'navManager': [
         'processDict',
         # 'arduinoDict',
-        # 'servoTypeDict',
-        # 'servoStaticDict',
-        # 'servoDerivedDict',
-        'servoCurrentDict',
+        'servoDict',
         'cartDict',
         'environmentDict',
 
@@ -167,10 +143,7 @@ usedSharedRessources = {
     'stickFigure': [
         'processDict',
         # 'arduinoDict',
-        # 'servoTypeDict',
-        # 'servoStaticDict',
-        # 'servoDerivedDict',
-        'servoCurrentDict',
+        'servoDict',
         # 'cartDict',
 
         #'sharedDataUpdateQueue',

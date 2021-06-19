@@ -13,8 +13,9 @@ import marvinglobal.usedSharedRessources as usr
 
 SHARED_DATA_PORT = 50000
 
-SERVO_STATIC_DEFINITIONS_FILE = '/home/marvin/InMoov/marvinData/servoStaticDefinitions.json'
 SERVO_TYPE_DEFINITIONS_FILE = '/home/marvin/InMoov//marvinData/servoTypeDefinitions.json'
+SERVO_STATIC_DEFINITIONS_FILE = '/home/marvin/InMoov/marvinData/servoStaticDefinitions.json'
+SERVO_FEEDBACK_DEFINITIONS_FILE = '/home/marvin/InMoov/marvinData/servoFeedbackDefinitions.json'
 PERSISTED_SERVO_POSITIONS_FILE = '/home/marvin/InMoov//marvinData/persistedServoPositions.json'
 
 INMOOV_BASE_FOLDER = '/home/marvin/InMoov'
@@ -24,11 +25,13 @@ ROOM_FOLDER = 'rooms'
 
 class SharedDataItems(Enum):
     PROCESS = 10
+    START_ALL_PROCESSES = 11
     ARDUINO = 20
     SERVO_TYPE = 30
     SERVO_STATIC = 31
-    SERVO_DERIVED = 32
-    SERVO_CURRENT = 33
+    SERVO_FEEDBACK = 32
+    SERVO_DERIVED = 33
+    SERVO_CURRENT = 34
     CART_STATE = 40
     CART_LOCATION = 41
     CART_MOVEMENT = 42
@@ -37,7 +40,7 @@ class SharedDataItems(Enum):
     FLOOR_OFFSET = 50
     SENSOR_TEST_DATA = 51
     IR_SENSOR_REFERENCE_DISTANCE = 52
-    OBSTACLE_DISTANCE = 53
+    ULTRASONIC_SENSORS = 53
     PLATFORM_IMU = 60
     HEAD_IMU = 61
     ENVIRONMENT_ROOM = 70
@@ -97,8 +100,8 @@ class CamTypes(Enum):
     HEAD_CAM = auto()
 
 camProperties = {
-    CamTypes.EYE_CAM: {'name': 'eyecam', 'deviceId': 1, 'cols': 640, 'rows': 480, 'fovH': 21, 'fovV': 40, 'rotate': -90, 'numReads': 2},
-    CamTypes.CART_CAM: {'name': 'cartcam', 'deviceId': 3, 'cols': 640, 'rows': 480, 'fovH': 60, 'fovV': 60, 'rotate': 0, 'numReads': 2},
+    CamTypes.EYE_CAM: {'name': 'eyecam', 'deviceId': 10, 'cols': 640, 'rows': 480, 'fovH': 21, 'fovV': 40, 'rotate': -90, 'numReads': 2},
+    CamTypes.CART_CAM: {'name': 'cartcam', 'deviceId': 8, 'cols': 640, 'rows': 480, 'fovH': 60, 'fovV': 60, 'rotate': 0, 'numReads': 2},
     CamTypes.HEAD_CAM: {'name': 'headcam', 'deviceId': None, 'cols': 1920, 'rows': 1080, 'fovH': 69.4, 'fovV': 42.5, 'rotate': 0, 'numReads': 5}}
 
 
@@ -175,6 +178,12 @@ class MoveDirection(Enum):
     ROTATE_LEFT = 9
     ROTATE_RIGHT = 10
 
+class CartMoveBlockEvents(Enum):
+    FREE_PATH = auto()
+    CLOSE_RANGE_OBSTACLE = auto()
+    FAR_RANGE_OBSTACLE = auto()
+    CLOSE_RANGE_ABYSS = auto()
+    FAR_RANGE_ABYSS = auto()
 
 CartStatus = Enum('CartStatus', 'UNKNOWN DOWN CONNECTING READY')
 
@@ -218,3 +227,21 @@ def evalPosFromDeg(servoStatic, servoDerived, inDeg):
     posPerDeg = servoDerived.posRange / servoDerived.degRange
     pos = (inDeg * posPerDeg) + servoStatic.zeroDegPos
     return round(pos)
+
+def getIrSensorName(sensorId):
+    if sensorId < 10:
+        return ["swipeFrontLeft  ",
+                "swipeFrontCenter",
+                "swipeFrontRight ",
+                "swipeBackLeft   ",
+                "swipeBackCenter ",
+                "swipeBackRight  ",
+                "staticLeftFront ",
+                "staticRightFront",
+                "staticLeftBack  ",
+                "staticRightBack "][sensorId]
+    else:
+        return f"invalid {sensorId=}"
+
+def getUsSensorName(sensorID):
+    return ["left", "middleLeft", "middleRight", "Right"][sensorID]
