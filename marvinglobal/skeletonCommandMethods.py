@@ -64,3 +64,6 @@ class SkeletonCommandMethods:        # use config.sc to access these methods
     def stopGesture(requestQueue, sender):
         requestQueue.put({'sender': sender, 'msgType': 'stopGesture'})
 
+    @staticmethod
+    def updatePIDValues(requestQueue, sender, servoName, newKp, newKi, newKd):
+        requestQueue.put({'sender': sender, 'msgType': 'updatePIDValues', 'servoName': servoName, 'kp': newKp, 'ki': newKi, 'kd': newKd})

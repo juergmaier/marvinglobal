@@ -55,26 +55,21 @@ class ServoStatic:
 class ServoFeedback:
     i2cMultiplexerAddress = 0
     i2cMultiplexerChannel = 0
-    speedACalcType = 0
-    speedAFactor = 0.0
-    speedAOffset = 0.0
-    speedBCalcType = 0
-    speedBFactor = 0.0
-    speedBOffset = 0.0
+    kp = 0.0
+    ki = 0.0
+    kd = 0.0
     degreesFactor = 1.0
-    servoSpeedRange = 90
+    feedbackInverted = 0
 
     def updateValues(self, servoFeedbackDefinition):
         self.i2cMultiplexerAddress = servoFeedbackDefinition['i2cMultiplexerAddress']
         self.i2cMultiplexerChannel = servoFeedbackDefinition['i2cMultiplexerChannel']
-        self.speedACalcType = servoFeedbackDefinition['speedACalcType']
-        self.speedAFactor = servoFeedbackDefinition['speedAFactor']
-        self.speedAOffset = servoFeedbackDefinition['speedAOffset']
-        self.speedBCalcType = servoFeedbackDefinition['speedBCalcType']
-        self.speedBFactor = servoFeedbackDefinition['speedBFactor']
-        self.speedBOffset = servoFeedbackDefinition['speedBOffset']
+        self.kp = servoFeedbackDefinition['kp']
+        self.ki = servoFeedbackDefinition['ki']
+        self.kd = servoFeedbackDefinition['kd']
         self.degPerPos = servoFeedbackDefinition['degPerPos']
-        self.servoSpeedRange = servoFeedbackDefinition['servoSpeedRange']
+        self.feedbackInverted = servoFeedbackDefinition['feedbackInverted']
+
 
 @dataclass
 class ServoDerived:
@@ -110,8 +105,11 @@ class ServoDerived:
 @dataclass
 class ServoCurrent:
     #degrees:int = 0
-    requestedPosition:int = 0
-    currentPosition:int = 0
+    millisAfterMoveStart:int = 0
+    currentPosition:int = 0         # the requested (non-feedback servo) or measured position
+    requestedPosition:int = 0       # the target position for a move
+    servoWritePosition:int = 0      # the position written to the servo
+    wantedPosition:int = 0          # the linear progress position within the move
     assigned:bool = False
     moving:bool = False
     attached:bool = False
@@ -123,8 +121,11 @@ class ServoCurrent:
 
     def updateValues(self, newValues):
         #self.degrees = newValues['degrees']
-        self.requestedPosition = newValues['requestedPosition']
+        self.millisAfterMoveStart = newValues['millisAfterMoveStart']
         self.currentPosition = newValues['currentPosition']
+        self.requestedPosition = newValues['requestedPosition']
+        self.servoWritePosition = newValues['servoWritePosition']
+        self.wantedPosition = newValues['wantedPosition']
         self.assigned = newValues['assigned']
         self.moving = newValues['moving']
         self.attached = newValues['attached']
@@ -135,4 +136,4 @@ class ServoCurrent:
         self.timeOfLastMoveRequest = newValues['timeOfLastMoveRequest']
 
     def updatePositionOnly(self, position):
-        self.position = newValues['position']
+        self.expectedPosition = newValues['position']
